@@ -1,0 +1,40 @@
+function take_snapshot(){
+    Webcam.snap(function(data_uri){
+        document.getElementById("result").innerHTML='<img id="captured-image" src="'+data_uri+'"/>';
+    });
+}
+Webcam.set({
+    width:350,
+    height:350,
+    image_format: 'png',
+    png_quality:90,
+    constraints: {
+        facingMode: "environment"
+    }
+});
+
+camera = document.getElementById("camera");
+
+Webcam.attach( '#camera' );
+console.log('ml5version',ml5.version);
+
+classifier=ml5.imageClassifier('MobileNet',modelLoaded)
+function modelLoaded(){
+    console.log("model is loaded");
+    
+}
+function check(){
+    img = document.getElementById('captured-image');
+    classifier.classify(img, gotResult);
+}
+
+function gotResult(error, results){
+    if (error){
+        console.error(error);
+    }
+    else{
+        console.log(results);
+        document.getElementById("object_name").innerHTML = results[0].label;
+
+       }
+   }
